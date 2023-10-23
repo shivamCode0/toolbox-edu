@@ -1,25 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Layout from "./Layout";
+import Home from "./pages/Home";
+import Essay from "./pages/essay";
+import Assessment from "./pages/assessment";
+import LessonPlan from "./pages/lessonplan";
+import Analytics from "./pages/analytics";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <BrowserRouter>
+        <Routes>
+          {/* 1️⃣ Wrap your routes in a pathless layout route */}
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/essay" element={<Essay />} />
+            <Route path="/lessonplan" element={<LessonPlan />} />
+            <Route path="/assessment" element={<Assessment />} />
+            <Route path="/analytics" element={<Analytics />} />
+            {/* <Route path="/blog/*" element={<BlogApp />} />
+          <Route path="/users/*" element={<UserApp />} /> */}
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
