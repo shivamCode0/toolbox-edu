@@ -19,7 +19,7 @@ function Sidebar() {
         {(
           [
             ["Dashboard", "/", BiSpreadsheet],
-            ["Essay Grading", "/essay", IoIosPaper],
+            ["AI Writing Evaluator", "/essay", IoIosPaper],
             ["Lesson Plan Creator", "/lessonplan", IoIosBook],
             ["Assessment Generator", "/assessment", IoIosSchool],
             ["Student Analytics", "/analytics", IoIosAnalytics],
