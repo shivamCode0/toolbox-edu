@@ -10,30 +10,8 @@ openai.api_key = api_key
 def evaluate_essay(essay):
     print(f"Evaluating essay:\n{essay}\n")
     categories = ["Grammar", "Structure", "Clarity", "Content"]
-
     feedback = {}
-
     for category in categories:
-        #         response = openai.ChatCompletion.create(
-        #             model="gpt-3.5-turbo",
-        #             # model="text-curie-001",
-        #             messages=[
-        #                 {"role": "system", "content": "You are a helpful assistant for evaluating essays."},
-        #                 {
-        #                     "role": "user",
-        #                     "content": f"You will be provided an essay. \
-        # Please provide feedback on {category} in the essay. \
-        # First, give very concise feedback on the essay. \
-        # Don't talk about general info, only the essay. \
-        # Grade at a medium difficulty and be very concise. Max 3 sentences feedback. Only give feedback on {category}. \
-        # Then, provide a score from 1 to 5. If there is no essay, give a score of 1. Make sure to give feedback first, \
-        # then say 'Score: ' before the number. ",
-        #                 },
-        #                 {"role": "assistant", "content": f"Essay:\n{essay}"},
-        #             ],
-        #         )
-        #         feedback[category] = response.choices[0].message["content"]
-
         response = openai.Completion.create(
             model="gpt-3.5-turbo-instruct",
             prompt=f"You will be provided an essay. Please provide feedback on {category} in the essay. \

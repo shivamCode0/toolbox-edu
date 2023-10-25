@@ -5,28 +5,6 @@ from api import evaluate_essay
 app = Flask(__name__)
 CORS(app)
 
-
-@app.route("/", methods=["GET"])
-def essay_form():
-    return render_template("evaluate_essay_form.html")
-
-
-@app.route("/evaluate-essay", methods=["POST"])
-def evaluate_essay_api():
-    try:
-        essay = request.form.get("essay")
-
-        # Call the evaluate_essay function to assess the essay
-        feedback, ratings, overall_score = evaluate_essay(essay)
-
-        return render_template(
-            "evaluate_essay_form.html", feedback=feedback, ratings=ratings, overall_score=overall_score
-        )
-
-    except Exception as e:
-        return jsonify({"error": str(e)})
-
-
 @app.route("/eval-essay-api", methods=["POST"])
 def eval_essay_api():
     print("eval-essay-api")
