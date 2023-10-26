@@ -5,7 +5,8 @@ from api import evaluate_essay
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/eval-essay-api", methods=["POST"])
+
+@app.route("/essay", methods=["POST"])
 def eval_essay_api():
     print("eval-essay-api")
     try:

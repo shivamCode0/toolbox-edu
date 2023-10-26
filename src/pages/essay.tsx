@@ -8,7 +8,7 @@ function jsonToFormData(jsonData: any) {
 }
 
 type Category = "Clarity" | "Content" | "Grammar" | "Structure";
-type Response = {
+type Evaluation = {
   feedback: {
     [key in Category]: string;
   };
@@ -19,11 +19,11 @@ type Response = {
 export default function EssayGrading() {
   const [essay, setEssay] = useState("");
   const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState<Response>(null);
+  const [evaluation, setEvaluation] = useState<Evaluation>(null);
 
   function analyzePaper() {
     setLoading(true);
-    fetch(`${BACKEND_URL}/eval-essay-api`, {
+    fetch(`${BACKEND_URL}/essay`, {
       method: "POST",
       // body is formData
       body: jsonToFormData({ essay }),
@@ -32,7 +32,7 @@ export default function EssayGrading() {
       .then((data) => {
         console.log(data);
         // alert(`Grade: ${data.grade}\n\n${data.message}`);
-        setResponse(data);
+        setEvaluation(data);
       })
       .finally(() => {
         setLoading(false);
@@ -62,18 +62,18 @@ export default function EssayGrading() {
           <button className="btn btn-primary btn-lg w-100" onClick={analyzePaper} disabled={loading}>
             Analyze Paper
           </button>
-          {response && (
+          {evaluation && (
             // feedback. first overall score then subscores with feedback for each category
             <>
               <hr />
               <h2 className="text-center">Feedback</h2>
-              <h3>Overall Score: {response.overall_score} / 20</h3>
-              {Object.entries(response.ratings).map(([category, score]) => (
+              <h3>Overall Score: {evaluation.overall_score} / 20</h3>
+              {Object.entries(evaluation.ratings).map(([category, score]) => (
                 <div key={category}>
                   <h4>
                     {category}: {score}
                   </h4>
-                  <p style={{ whiteSpace: "pre-wrap" }}>{response.feedback[category as Category].trim()}</p>
+                  <p style={{ whiteSpace: "pre-wrap" }}>{evaluation.feedback[category as Category].trim()}</p>
                 </div>
               ))}
             </>

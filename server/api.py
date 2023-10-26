@@ -8,6 +8,9 @@ openai.api_key = api_key
 
 
 def evaluate_essay(essay):
+    # trim the essay to 4000 characters
+    essay = essay[:4000]
+
     print(f"Evaluating essay:\n{essay}\n")
     categories = ["Grammar", "Structure", "Clarity", "Content"]
     feedback = {}
@@ -16,7 +19,7 @@ def evaluate_essay(essay):
             model="gpt-3.5-turbo-instruct",
             prompt=f"You will be provided an essay. Please provide feedback on {category} in the essay. \
 First, give very concise feedback on the essay. Don't talk about general info, only the essay. \
-Grade at a medium difficulty and be very concise. Max 3 sentences feedback. Only give feedback on {category}. \
+Grade at a medium easy difficulty but give points where possible and be very concise. Max 3 sentences feedback. Only give feedback on {category}. \
 Then, provide a score from 1 to 5. If there is no essay, give a score of 1. Make sure to give feedback \
 first, then say 'Score: ' before the number.\n\nEssay: \n\{essay}\nEND OF ESSAY\nRemember, here are the instructions. Make sure to give feedback \
 first, then say 'Score: ' before the number.\nFeedback: ",
@@ -35,7 +38,7 @@ first, then say 'Score: ' before the number.\nFeedback: ",
         # Extract numerical ratings from the feedback using regular expressions
         rating_match = re.search(r"Score:\s(\d+(\.\d+)?)", feedback_text)
         if rating_match:
-            rating = int(rating_match.group(1))
+            rating = float(rating_match.group(1))
             ratings[category] = rating
 
             # remove the rating from the feedback text
