@@ -1,4 +1,4 @@
-import { BACKEND_URL } from "src/util";
+import { BACKEND_URL, chunk } from "src/util";
 import React, { useState } from "react";
 import { Accordion } from "react-bootstrap";
 
@@ -9,37 +9,28 @@ function jsonToFormData(jsonData: any) {
 }
 
 export default function LessonPlanGenerator() {
-  const [essay, setEssay] = useState("");
+  const [days, setDays] = useState(1);
+  const [standards, setStandards] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
 
   function analyzePaper() {
     setLoading(true);
-    fetch(`${BACKEND_URL}/lessonplan`, {
-      method: "POST",
-      // body is formData
-      body: jsonToFormData({ essay }),
-    })
+    fetch(`${BACKEND_URL}/lessonplan`, { method: "POST", body: jsonToFormData({ course_standards: standards, days }) })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        // alert(`Grade: ${data.grade}\n\n${data.message}`);
         setResult(data);
       })
-      .finally(() => {
-        setLoading(false);
-        // setEssay("");
-      });
+      .finally(() => setLoading(false));
   }
 
   return (
     <div className="container-fluid mt-3">
       <h1 className="text-center">Lesson Plan Creator</h1>
       <div className="row mt-4">
+        <div className="col-3"></div>
         <div className="col-md-6">
-          <label htmlFor="standards" className="form-label">
-            Enter the standards you want to cover
-          </label>
           {loading ? (
             <div className="d-flex justify-content-center">
               <div className="spinner-border text-primary" role="status">
@@ -47,18 +38,61 @@ export default function LessonPlanGenerator() {
               </div>
             </div>
           ) : (
-            <textarea className="form-control" id="standards" rows={10} value={essay} disabled={loading} onChange={(e) => setEssay(e.target.value)} placeholder="Paste paper here" />
+            <div className="mb-2">
+              {/* Number of Days */}
+              <label htmlFor="days" className="form-label">
+                How many days do you want to cover the standards?
+              </label>
+              <input type="number" className="form-control" id="days" value={days} disabled={loading} onChange={(e) => setDays(parseInt(e.target.value))} placeholder="Number of days" />
+              <br />
+              <label htmlFor="standards" className="form-label">
+                Enter the standards you want to cover
+              </label>
+              <textarea
+                //
+                className="form-control"
+                id="standards"
+                rows={5}
+                value={standards}
+                disabled={loading}
+                onChange={(e) => setStandards(e.target.value)}
+                placeholder="Enter standards here"
+              />
+              <button className="btn btn-primary btn-lg w-100 mt-3" onClick={analyzePaper} disabled={loading}>
+                Generate Lesson Plan
+              </button>
+            </div>
           )}
         </div>
-        <div className="col-md-6">
-          <button className="btn btn-primary btn-lg w-100" onClick={analyzePaper} disabled={loading}>
-            Analyze Paper
-          </button>
-          {result && (
-            // feedback. first overall score then subscores with feedback for each category
-            <></>
-          )}
-        </div>
+        <div className="col-3"></div>
+      </div>
+      <div className="container">
+        {result && (
+          <table className="plantable">
+            <tbody>
+              {chunk(result.plan, 5)
+                .map((row: string[][], i) => (row.length === 5 ? row : [...row, ...Array(5 - row.length).fill([])]))
+                .map((row: string[][], i) => (
+                  <tr key={i}>
+                    {row.map((cell, j) => (
+                      <td key={j} style={{ ...(cell.length === 0 && { border: "none" }) }}>
+                        {cell.length > 0 && (
+                          <>
+                            <h5>Day {i * 5 + j + 1}</h5>
+                            <ul>
+                              {cell.map((line, k) => (
+                                <li key={k}>{line}</li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

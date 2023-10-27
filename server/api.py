@@ -54,3 +54,62 @@ first, then say 'Score: ' before the number.\nFeedback: ",
     overall_score = sum(ratings.values())
     print(f"Overall Score: {overall_score}")
     return feedback, ratings, overall_score
+
+
+def generate_lesson_plan(days: int, course_standards: str) -> list[list[str]]:
+    lesson_plan = []
+
+    prompt = f"""Generate a lesson plan for a {days}-day course based on the following course standards:
+{course_standards}
+END OF STANDARDS
+Output your lesson plan like the following example structure:
+```
+Lesson Plan:
+Day 1
+- Intro to Limits
+- Limit Notation
+- Direct Substitution
+
+
+Day 2
+- Limits by Factoring
+- Continuity & Removable Discontinuities
+- Rational Functions
+
+Day 3
+- Implicit Differentiation
+- L'Hopital's rule
+- Limits (Unit 1) Test Review
+```
+
+In other words, Say "Day N" and then 2 to 4 short bullet points like the ones above for each day. Make sure to include the "Day N" part. \
+Then, skip a line and start the next day. Do not use the example above, generate your own lesson plan. \
+Keep going until you fill all the {days} days.\
+
+Lesson Plan:
+"""
+    print(prompt)
+    response = openai.Completion.create(
+        model="gpt-3.5-turbo-instruct",
+        prompt=prompt,
+        max_tokens=3000,  # You may need to adjust the max_tokens based on the response length.
+    )
+
+    plan_text = response.choices[0].text.strip()
+
+    print(plan_text)
+
+    def parse_lesson_plan(lesson_plan_text):
+        lesson_plan = []
+        day_lines = lesson_plan_text.split("\n\n")
+
+        for day_text in day_lines:
+            day_lines = day_text.strip().split("\n")
+            day_bullet_points = [line.strip("- ").strip() for line in day_lines[1:]]
+            lesson_plan.append(day_bullet_points)
+
+        return lesson_plan
+
+    plan_formatted = parse_lesson_plan(plan_text)
+
+    return plan_formatted, plan_text

@@ -45,9 +45,6 @@ export default function EssayGrading() {
       <h1 className="text-center">AI Writing Evaluator</h1>
       <div className="row mt-4">
         <div className="col-md-7">
-          <label htmlFor="essay" className="form-label">
-            Paste the student's paper here
-          </label>
           {loading ? (
             <div className="d-flex justify-content-center">
               <div className="spinner-border text-primary" role="status">
@@ -55,7 +52,12 @@ export default function EssayGrading() {
               </div>
             </div>
           ) : (
-            <textarea className="form-control" id="essay" rows={10} value={essay} disabled={loading} onChange={(e) => setEssay(e.target.value)} placeholder="Paste paper here" />
+            <>
+              <label htmlFor="essay" className="form-label">
+                Paste the student's paper here
+              </label>
+              <textarea className="form-control" id="essay" rows={10} value={essay} disabled={loading} onChange={(e) => setEssay(e.target.value)} placeholder="Paste paper here" />
+            </>
           )}
         </div>
         <div className="col-md-5">

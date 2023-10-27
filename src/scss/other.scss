@@ -16,3 +16,20 @@
     }
   }
 }
+
+.plantable {
+  font-size: 0.9em;
+  table-layout: fixed;
+  // borders around every cell
+  border: 1px solid black;
+  // borders between every cell
+  border-collapse: collapse;
+  // borders around the table
+  td {
+    padding: 0.5rem;
+    vertical-align: top;
+    width: 20%;
+    height: 8rem;
+    border: solid 1px black;
+  }
+}

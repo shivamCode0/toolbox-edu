@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS
-from api import evaluate_essay
+from api import evaluate_essay, generate_lesson_plan
 
 app = Flask(__name__)
 CORS(app)
@@ -16,6 +16,23 @@ def eval_essay_api():
         feedback, ratings, overall_score = evaluate_essay(essay)
 
         return jsonify({"feedback": feedback, "ratings": ratings, "overall_score": overall_score})
+
+    except Exception as e:
+        print(e)
+        return jsonify({"error": str(e)})
+
+
+@app.route("/lessonplan", methods=["POST"])
+def lessonplan():
+    print("lessonplan")
+    try:
+        days = request.form.get("days")
+        course_standards = request.form.get("course_standards")
+
+        # Call the evaluate_essay function to assess the essay
+        plan, text = generate_lesson_plan(days, course_standards)
+
+        return jsonify({"plan": plan, "text": text})
 
     except Exception as e:
         print(e)
