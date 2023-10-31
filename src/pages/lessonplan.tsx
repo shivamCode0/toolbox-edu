@@ -1,6 +1,5 @@
 import { BACKEND_URL, chunk } from "src/util";
 import React, { useState } from "react";
-import { Accordion } from "react-bootstrap";
 
 function jsonToFormData(jsonData: any) {
   const formData = new FormData();

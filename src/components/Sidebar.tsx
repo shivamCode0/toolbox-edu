@@ -1,10 +1,8 @@
+import React from "react";
 import { Link, useLocation } from "react-router-dom"; // You can replace this with the appropriate routing component if needed
 import { Dropdown } from "react-bootstrap";
-import { BiLogoBootstrap, BiHome, BiSpreadsheet } from "react-icons/bi";
-import { IoIosPaper, IoIosBook, IoIosSchool, IoIosAnalytics } from "react-icons/io";
-import type { IconType } from "react-icons";
-import React from "react";
 import { ReactComponent as Logo } from "src/img/logo.svg";
+import { links } from "src/util";
 
 function Sidebar() {
   const location = useLocation();
@@ -16,15 +14,7 @@ function Sidebar() {
       </Link>
       <hr />
       <ul className="nav nav-pills flex-column mb-auto">
-        {(
-          [
-            ["Dashboard", "/", BiSpreadsheet],
-            ["AI Writing Evaluator", "/essay", IoIosPaper],
-            ["Lesson Plan Creator", "/lessonplan", IoIosBook],
-            ["Assessment Generator", "/assessment", IoIosSchool],
-            ["Student Analytics", "/analytics", IoIosAnalytics],
-          ] as [string, string, IconType][]
-        ).map(([text, link, Icon], index) => (
+        {links.map(([text, link, Icon], index) => (
           <li key={index}>
             <Link to={link} className={`nav-link text-white ${location.pathname === link ? "active" : ""}`}>
               <Icon className="bi me-2" size={24} />

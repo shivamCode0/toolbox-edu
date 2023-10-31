@@ -1,62 +1,66 @@
-def parse_lesson_plan(lesson_plan_text):
-    lesson_plan = []
-    day_lines = lesson_plan_text.split("\n\n")
-
-    for day_text in day_lines:
-        day_lines = day_text.strip().split("\n")
-        day_bullet_points = [line.strip("- ").strip() for line in day_lines[1:]]
-        lesson_plan.append(day_bullet_points)
-
-    return lesson_plan
+import re
 
 
-# Example lesson plan in plaintext
-lesson_plan_text = """
-Day 1
-- Introduction to Convergent and Divergent Infinite Series 
-- Definition of Convergent and Divergent Series 
-- Arithmetic and Geometric Series
+def split_multiple_choice(text):
+    # Split the text into individual questions using regular expression
+    questions = re.split(r"\d+\.", text)
 
-Day 2
-- The nth Term Test for Divergence 
-- Overview of the Integral Test for Convergence 
-- Using the Integral Test to Determine Convergence
+    # Initialize a list to store the tuples
+    result = []
 
-Day 3
-- Understanding the Harmonic Series and p-Series 
-- Properties and Convergence of Harmonic and p-Series 
-- Applying the Comparison Test for Convergence
+    # Loop through each question
+    for question in questions:
+        # Skip empty strings
+        if not question.strip():
+            continue
 
-Day 4
-- Exploring the Alternating Series Test for Convergence 
-- Conditions for Application of the Alternating Series Test 
-- Examples and Practice Problems with Alternating Series
+        # Initialize variables to store question, choices, and correct answer
+        question_text = None
+        choices = []
+        correct_answer = None
 
-Day 5
-- Evaluating Convergence using the Ratio Test 
-- Applying the Ratio Test to Sequences and Series 
-- Testing for Absolute and Conditional Convergence
+        # Split the question into lines
+        lines = question.strip().split("\n")
 
-Day 6
-- Error Bounds in Alternating Series 
-- Understanding Taylor Polynomial Approximations 
-- Calculating Lagrange Error Bound 
+        # Extract the question text (first line)
+        question_text = lines[0].strip()
 
-Day 7
-- Discussion of Radius and Interval of Convergence 
-- Identifying Cases of Convergence and Divergence 
-- Examples and Application of Power Series
+        # Extract choices (lines 1 to second-to-last line)
+        for line in lines[1:-1]:
+            choice_match = re.match(r"([A-D]\) )", line)
+            if choice_match:
+                choices.append(choice_match.group(1) + line[3:].strip())
 
-Day 8
-- Finding Taylor or Maclaurin Series for a Function 
-- Identifying Coefficients in a Maclaurin Series 
-- Finding the Sum of a Taylor Series 
+        # Extract the correct answer (last line)
+        correct_match = re.search(r"Correct Answer: ([A-D])", lines[-1])
+        if correct_match:
+            correct_answer = correct_match.group(1)
 
-Day 9
-- Representing Functions as Power Series 
-- Using Power Series to Solve Problems 
-- Application Problems and Review for Test
+        # Add the extracted information as a tuple to the result list
+        result.append((question_text, choices, correct_answer))
+
+    return result
+
+
+# Test the function with your example text
+example_text = """
+1. What is the capital of France?
+A) Berlin
+B) London
+C) Paris
+D) Madrid
+Correct Answer: C
+
+2. What is the capital of Germany?
+A) Berlin
+B) London
+C) Paris
+D) Madrid
+Correct Answer: A
 """
 
-lesson_plan = parse_lesson_plan(lesson_plan_text)
-print(lesson_plan)
+questions = split_multiple_choice(example_text)
+
+import json
+
+print(json.dumps(questions, indent=4))
