@@ -31,7 +31,8 @@ export default function AssessmentQuestionGenerator() {
     <div className="container-fluid mt-3">
       <h1 className="text-center">Assessment Question Generator</h1>
       <div className="row mt-4">
-        <div className="col-md-12">
+        <div className="col-md-3"></div>
+        <div className="col-md-6">
           {loading ? (
             <div className="d-flex justify-content-center">
               <div className="spinner-border text-primary" role="status">
