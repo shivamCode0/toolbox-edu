@@ -2,8 +2,7 @@ import openai
 import re
 
 # Set your OpenAI API key
-api_key = "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"
-api_key = "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"
+api_key = "sk-gvtddc0djc73piJ0DjJ8fjeH39D43hfJ84C8nv84"  # not a real key for my video
 openai.api_key = api_key
 
 
