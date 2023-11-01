@@ -31,8 +31,8 @@ export default function AssessmentQuestionGenerator() {
     <div className="container-fluid mt-3">
       <h1 className="text-center">Assessment Question Generator</h1>
       <div className="row mt-4">
-        <div className="col-md-3"></div>
-        <div className="col-md-6">
+        <div className="col-md-2"></div>
+        <div className="col-md-8">
           {loading ? (
             <div className="d-flex justify-content-center">
               <div className="spinner-border text-primary" role="status">
@@ -71,33 +71,29 @@ export default function AssessmentQuestionGenerator() {
               </button>
 
               {questions.length > 0 && (
-                <div style={{ fontSize: ".85em" }}>
+                <div className="mb-4" style={{ fontSize: ".85em" }}>
                   <hr />
-                  <div className="row">
-                    <div className="col-md-3"></div>
-                    <div className="col-md-6">
-                      <h2 className="text-center">Generated Questions</h2>
+
+                  <h2 className="text-center">Generated Questions</h2>
+                  <div>
+                    {questions.map(([q, choices, correct]: [string, string[], "A" | "B" | "C" | "D"], i) => (
                       <div>
-                        {questions.map(([q, choices, correct]: [string, string[], "A" | "B" | "C" | "D"], i) => (
-                          <div>
-                            <p style={{ fontWeight: "bold" }}>
-                              {i + 1}. {q}
-                            </p>
-                            {choices.map((choice, j) => (
-                              <p>{choice}</p>
-                            ))}
-                          </div>
+                        <p style={{ fontWeight: "bold" }}>
+                          {i + 1}. {q}
+                        </p>
+                        {choices.map((choice, j) => (
+                          <p>{choice}</p>
                         ))}
                       </div>
-                      <h6 className="text-center fw-bold">Answers:</h6>
-
-                      {questions.map(([q, choices, correct]: [string, string[], "A" | "B" | "C" | "D"], i) => (
-                        <p className="mb-0">
-                          {i + 1}. {correct}
-                        </p>
-                      ))}
-                    </div>
+                    ))}
                   </div>
+                  <h6 className="text-center fw-bold">Answers:</h6>
+
+                  {questions.map(([q, choices, correct]: [string, string[], "A" | "B" | "C" | "D"], i) => (
+                    <p className="mb-0">
+                      {i + 1}. {correct}
+                    </p>
+                  ))}
                 </div>
               )}
             </>
